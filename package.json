@@ -1,0 +1,33 @@
+{
+    "name": "json2dto",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "build": "nuxt build",
+        "build:cf": "nuxi build --preset=cloudflare_pages",
+        "dev": "nuxt dev",
+        "generate": "nuxt generate",
+        "preview": "nuxt preview",
+        "preview:cf": "wrangler pages dev dist",
+        "test": "vitest run",
+        "postinstall": "nuxt prepare",
+        "preinstall": "bunx only-allow bun"
+    },
+    "dependencies": {
+        "@vueuse/core": "^14.2.1",
+        "@nuxt/eslint": "1.15.2",
+        "@nuxt/fonts": "0.14.0",
+        "@nuxt/icon": "2.2.1",
+        "@nuxtjs/tailwindcss": "6.14.0",
+        "fflate": "^0.8.2",
+        "nitro-cloudflare-dev": "^0.2.2",
+        "nuxt": "^4.4.2",
+        "shiki": "^4.0.2",
+        "vue": "^3.5.32",
+        "vue-router": "^5.0.4"
+    },
+    "devDependencies": {
+        "vitest": "^4.1.4",
+        "wrangler": "^4.81.1"
+    }
+}
