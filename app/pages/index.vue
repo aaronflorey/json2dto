@@ -50,6 +50,7 @@ const selectedLanguage = useStorage('json2dto.language', 'php')
 const selectedPackage = useStorage('json2dto.package', 'spatie/laravel-data')
 const packageOptions = {
   php: ['spatie/laravel-data', 'crell/serde', 'cuyz/valinor'],
+  javascript: ['jsdoc'],
   typescript: ['native']
 } as const
 const phpGeneratorSettings = useStorage<PhpGeneratorSettings>('json2dto.settings.php', {
@@ -82,7 +83,7 @@ function getHighlighter() {
   if (!highlighterPromise) {
     highlighterPromise = createHighlighter({
       themes: ['github-dark'],
-      langs: ['php', 'typescript']
+      langs: ['javascript', 'php', 'typescript']
     })
   }
 
@@ -97,7 +98,11 @@ watch(
       return
     }
 
-    const language = file.path.endsWith('.ts') ? 'typescript' : 'php'
+    const language = file.path.endsWith('.ts')
+      ? 'typescript'
+      : file.path.endsWith('.js')
+        ? 'javascript'
+        : 'php'
     const highlighter = await getHighlighter()
     highlightedPreview.value = highlighter.codeToHtml(file.contents, {
       lang: language,
@@ -234,6 +239,7 @@ function triggerBrowserDownload(blob: Blob, filename: string) {
             Language
             <select v-model="selectedLanguage" class="mt-1 w-full rounded border p-2">
               <option value="php">PHP</option>
+              <option value="javascript">JavaScript</option>
               <option value="typescript">TypeScript</option>
             </select>
           </label>

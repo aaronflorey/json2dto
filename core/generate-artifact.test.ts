@@ -90,6 +90,27 @@ describe('generateArtifactFromJson', () => {
     expect(result.artifact.files[0]?.contents).toContain('active: boolean | null')
   })
 
+  it('generates JavaScript JSDoc typedefs for IDE-friendly type hints', () => {
+    const result = generateArtifactFromJson({
+      rawJson: JSON.stringify({ user_profile: { first_name: 'Ada' }, users: [{ active: true }] }),
+      target: { language: 'javascript', package: 'jsdoc' },
+      settings: {
+        rootName: 'ApiPayload',
+        propertyCasing: 'snake_case',
+        allPropertiesNullable: true
+      }
+    })
+
+    expect(result.artifact.files).toHaveLength(1)
+    expect(result.artifact.files[0]?.path).toBe('src/dto/ApiPayload.js')
+    expect(result.artifact.files[0]?.contents).toContain('// @ts-check')
+    expect(result.artifact.files[0]?.contents).toContain('@typedef {{')
+    expect(result.artifact.files[0]?.contents).toContain('user_profile: UserProfile | null;')
+    expect(result.artifact.files[0]?.contents).toContain('users: Array<User> | null;')
+    expect(result.artifact.files[0]?.contents).toContain('}} ApiPayload')
+    expect(result.artifact.files[0]?.contents).toContain('active: boolean | null;')
+  })
+
   it('rejects unsupported generator selection', () => {
     expect(() =>
       generateArtifactFromJson({

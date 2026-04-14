@@ -14,10 +14,10 @@ const defaultSettings: TypeScriptGeneratorSettings = {
   propertyCasing: 'camelCase'
 }
 
-export const typescriptNativeGenerator: Generator<TypeScriptGeneratorSettings> = {
+export const javascriptJSDocGenerator: Generator<TypeScriptGeneratorSettings> = {
   id: {
-    language: 'typescript',
-    package: 'native'
+    language: 'javascript',
+    package: 'jsdoc'
   },
 
   getSettings() {
@@ -32,14 +32,13 @@ export const typescriptNativeGenerator: Generator<TypeScriptGeneratorSettings> =
     const normalizedRootName = toPascalCase(settings.rootName || 'Root')
     const records = collectInterfaceRecords(context.root, normalizedRootName)
     const nameBySignature = createTypeScriptNameMap(records)
-
     const declarations = records
-      .map((record) => renderInterface(record, nameBySignature, settings))
+      .map((record) => renderTypedef(record, nameBySignature, settings))
       .join('\n\n')
 
     const file: GeneratedFile = {
-      path: `src/dto/${normalizedRootName}.ts`,
-      contents: `${declarations}\n`
+      path: `src/dto/${normalizedRootName}.js`,
+      contents: `// @ts-check\n\n${declarations}\n`
     }
 
     return {
@@ -53,7 +52,7 @@ export const typescriptNativeGenerator: Generator<TypeScriptGeneratorSettings> =
   }
 }
 
-function renderInterface(
+function renderTypedef(
   record: { name: string, object: GeneratorContext['root'] },
   nameBySignature: Map<string, string>,
   settings: TypeScriptGeneratorSettings
@@ -62,8 +61,9 @@ function renderInterface(
     const propertyName = getTypeScriptPropertyName(property.key, settings)
     const optional = property.optional ? '?' : ''
     const type = resolveTypeScriptType(property.value, nameBySignature, settings.allPropertiesNullable)
-    return `  ${propertyName}${optional}: ${type}`
+
+    return ` *   ${propertyName}${optional}: ${type};`
   })
 
-  return `export interface ${record.name} {\n${lines.join('\n')}\n}`
+  return ['/**', ' * @typedef {{', ...lines, ` * }} ${record.name}`, ' */'].join('\n')
 }

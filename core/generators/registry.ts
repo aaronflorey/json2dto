@@ -1,6 +1,7 @@
 import type { Generator, GeneratorSelection } from './types'
 import { crellSerdeGenerator } from './crell-serde'
 import { cuyzValinorGenerator } from './cuyz-valinor'
+import { javascriptJSDocGenerator } from './javascript-jsdoc'
 import { laravelDataGenerator } from './spatie-laravel-data'
 import { typescriptNativeGenerator } from './typescript-native'
 
@@ -10,6 +11,7 @@ const REGISTRY = new Map<string, AnyGenerator>([
   [generatorKey(laravelDataGenerator.id), laravelDataGenerator],
   [generatorKey(crellSerdeGenerator.id), crellSerdeGenerator],
   [generatorKey(cuyzValinorGenerator.id), cuyzValinorGenerator],
+  [generatorKey(javascriptJSDocGenerator.id), javascriptJSDocGenerator],
   [generatorKey(typescriptNativeGenerator.id), typescriptNativeGenerator]
 ])
 
