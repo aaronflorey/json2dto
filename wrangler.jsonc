@@ -3,5 +3,8 @@
   "name": "json2dto",
   "compatibility_date": "2026-04-11",
   "compatibility_flags": ["nodejs_compat"],
-  "pages_build_output_dir": "dist"
+  "pages_build_output_dir": "dist",
+  "vars": {
+    "BUN_VERSION": "1.3.12"
+  }
 }
